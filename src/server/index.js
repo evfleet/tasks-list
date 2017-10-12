@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const constants = require('./config/constants');
@@ -14,6 +15,9 @@ mongoose.connection.on('error', (err) => console.error(err));
 
 app.use(express.static(path.resolve(__dirname, '../../dist/client')));
 app.use(bodyParser.json());
+app.use(cookieParser(constants.COOKIE_SECRET, {
+  httpOnly: true
+}));
 
 if (process.env.NODE_ENV === 'development') {
   const config = require('../../webpack.config.dev');
