@@ -1,9 +1,15 @@
 const router = require('express').Router();
 
-router.get('/', (req, res) => {
-  res.json({
-    test: true
-  });
+router.post('/authenticate', (req, res) => {
+
+});
+
+router.post('/login', (req, res) => {
+
+});
+
+router.post('/register', (req, res) => {
+
 });
 
 module.exports = router;
