@@ -16,10 +16,12 @@ const userSchema = new mongoose.Schema({
     type: String
   },
   verified: {
-    type: Boolean
+    type: Boolean,
+    default: false
   },
   verificationToken: {
-    type: String
+    type: String,
+    default: crypto.randomBytes(32).toString('hex')
   },
   resetExpires: {
     type: Date

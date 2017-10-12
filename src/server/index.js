@@ -3,12 +3,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-const PORT = 3000;
 const app = express();
-
 const constants = require('./config/constants');
 
-mongoose.connect(constants.mongoURI, {
+mongoose.connect(constants.MONGO_URI, {
   useMongoClient: true
 });
 mongoose.Promise = global.Promise;
@@ -45,6 +43,14 @@ app.get('*', (req, res) => {
   res.sendFile(path.resolve(__dirname, '../../dist/client/index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port: ${PORT}`);
+app.use((err, req, res, next) => {
+  console.log(err);
+
+  res.json({
+    err
+  });
+});
+
+app.listen(constants.PORT, () => {
+  console.log(`Server running on port: ${constants.PORT}`);
 });
