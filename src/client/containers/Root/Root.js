@@ -64,9 +64,8 @@ class Root extends Component {
           <Loading />
         ) : (
           <Switch>
-            <Route exact path="/" component={ Landing } />
-
             <Route path="/auth" component={ Auth } />
+            <Route exact path="/" component={ Landing } />
           </Switch>
         )}
       </Layout>

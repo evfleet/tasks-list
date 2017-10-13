@@ -31,3 +31,17 @@ export const loginFail = () => ({
 export const logout = () => ({
   type: actionTypes.LOGOUT
 });
+
+export const verificationPass = ({ email }) => ({
+  type: actionTypes.VERIFICATION_PASS,
+  payload: {
+    email
+  }
+});
+
+export const verificationFail = ({ email }) => ({
+  type: actionTypes.VERIFICATION_FAIL,
+  payload: {
+    email
+  }
+});

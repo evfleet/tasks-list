@@ -1,45 +1,32 @@
 import React, { Component } from 'react';
-import { Divider, Form, Header, Input, Label } from 'semantic-ui-react';
+import { Form, Input, Label } from 'semantic-ui-react';
 
-class AuthForm extends Component {
-  render() {
-    const { mode, fields, handleSubmit, handleInputChange } = this.props;
+const AuthForm = ({ mode, fields, handleSubmit, handleInputChange }) => (
+  <Form size="large">
+    {Object.keys(fields).map((field) => (
+      <Form.Field key={field}>
+        <Form.Input
+          name={field}
+          type={field === 'password' ? 'password' : 'text'}
+          placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+          value={fields[field].value}
+          onChange={handleInputChange}
+        />
 
-    return (
-      <Form size="large">
-        <Form.Field>
-          <Input
-            name="email"
-            placeholder="Email"
-            value={fields.email.value}
-            error={!!fields.email.error}
-            onChange={handleInputChange}
-          />
-        </Form.Field>
+        {fields[field].error ? <p>{fields[field].error}</p> : null}
+      </Form.Field>
+    ))}
 
-        <Form.Field>
-          <Input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={fields.password.value}
-            error={!!fields.password.error}
-            onChange={handleInputChange}
-          />
-        </Form.Field>
+    <Form.Group>
+      <Form.Button>
+        Clear
+      </Form.Button>
 
-        <Form.Group>
-          <Form.Button>
-            Clear
-          </Form.Button>
-
-          <Form.Button>
-            {mode.charAt(0).toUpperCase() + mode.slice(1)}
-          </Form.Button>
-        </Form.Group>
-      </Form>
-    );
-  }
-}
+      <Form.Button onClick={handleSubmit}>
+        {mode.charAt(0).toUpperCase() + mode.slice(1)}
+      </Form.Button>
+    </Form.Group>
+  </Form>
+);
 
 export default AuthForm;

@@ -3,6 +3,7 @@ import * as actionTypes from 'actions/actionTypes';
 const initialState = {
   isLoggedIn: false,
   email: null,
+  accessToken: null,
   refreshToken: null
 };
 
@@ -19,6 +20,13 @@ export default (state = initialState, action) => {
 
     case actionTypes.AUTH_FAIL:
       return initialState;
+
+    case actionTypes.VERIFICATION_PASS:
+    case actionTypes.VERIFICATION_FAIL:
+      return {
+        ...initialState,
+        email: payload.email
+      };
 
     default:
       return state;
