@@ -2,8 +2,14 @@ import React, { Component } from 'react';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Container, Tab } from 'semantic-ui-react';
 
 import * as actions from 'actions';
+
+import AuthForm from 'components/AuthForm';
+
+import ResetForm from 'components/ResetForm';
+import VerificationForm from 'components/VerificationForm';
 
 @withRouter
 @connect(
@@ -18,7 +24,6 @@ import * as actions from 'actions';
 
 class Auth extends Component {
   state = {
-    mode: 'login',
     fields: {
       email: {
         value: '',
@@ -31,91 +36,88 @@ class Auth extends Component {
     }
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
+  login() {
 
-    const { mode, fields } = this.state;
-
-    if (mode === 'login') {
-
-    }
-
-    if (mode === 'register') {
-
-    }
   }
 
-  handleChange = (event) => {
+  register() {
+
+  }
+
+  handleTabChange = (event, data) => {
+    this.props.history.replace(`/auth/${data.panes[data.activeIndex].menuItem.toLowerCase()}`);
+  }
+
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+
     this.setState({
       ...this.state,
       fields: {
         ...this.state.fields,
-        [event.target.name]: {
-          value: event.target.value,
+        [name]: {
+          value: value,
           errors: null
         }
       }
     });
   }
 
-  toggleMode = () => {
-    this.setState({
-      ...this.state,
-      mode: this.state.mode === 'login' ? 'register' : 'login'
-    });
-  }
-
   render() {
-    const { mode, fields: { email, password } } = this.state;
+    const { mode, fields } = this.state;
+    const activeIndex = this.props.location.pathname === '/auth/login' ? 0 : 1;
+
+    const panes = [
+      {
+        menuItem: 'Login',
+        render: () => (
+          <Tab.Pane>
+            <AuthForm
+              mode="login"
+              fields={fields}
+              handleSubmit={this.login}
+              handleInputChange={this.handleInputChange}
+            />
+          </Tab.Pane>
+        )
+      },
+      {
+        menuItem: 'Register',
+        render: () => (
+          <Tab.Pane>
+            <AuthForm
+              mode="register"
+              fields={fields}
+              handleSubmit={this.register}
+              handleInputChange={this.handleInputChange}
+            />
+          </Tab.Pane>
+        )
+      }
+    ];
 
     return (
-      <div>
-        <div>
-          <button
-            onClick={this.toggleMode}
-            disabled={mode === 'login'}
-          >
-            Login
-          </button>
+      <Container>
+        <Switch>
+          <Route exact path="/auth/reset" render={() => (
+            <ResetForm />
+          )} />
 
-          <button
-            onClick={this.toggleMode}
-            disabled={mode === 'register'}
-          >
-            Register
-          </button>
-        </div>
+          <Route exact path="/auth/verification" render={() => (
+            <VerificationForm />
+          )} />
 
-        <div>
-          <h2>{mode}</h2>
+          <Route path="/auth/" render={() => (
+            <Tab
 
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="auth__email">
-              Email:
-              <input
-                id="auth__email"
-                name="email"
-                type="email"
-                value={email.value}
-                onChange={this.handleChange}
-              />
-            </label>
-
-            <label htmlFor="auth__password">
-              Password:
-              <input
-                id="auth__password"
-                name="password"
-                type="password"
-                value={password.value}
-                onChange={this.handleChange}
-              />
-            </label>
-
-            <button type="submit">{mode}</button>
-          </form>
-        </div>
-      </div>
+              menu={{ attached: 'top', fluid: true, widths: 2 }}
+              activeIndex={activeIndex}
+              panes={panes}
+              onTabChange={this.handleTabChange}
+            />
+          )} />
+        </Switch>
+      </Container>
     );
   }
 }

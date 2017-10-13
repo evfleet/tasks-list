@@ -23,11 +23,15 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
+      },
+      {
+        test: /\.css$/,
+        use: [ 'style-loader', 'css-loader' ]
       }
     ]
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: ['.js', '.css'],
     modules: ['./src/client', 'node_modules']
   },
   devServer: {

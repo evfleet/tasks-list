@@ -7,14 +7,13 @@ import * as actions from 'actions';
 
 import Auth from 'containers/Auth';
 import Landing from 'containers/Landing';
-import Verification from 'containers/Verification';
 
 import Layout from 'components/Layout';
 import Loading from 'components/Loading';
 
 @withRouter
 @connect(
-  ({ auth, isLoading, rehydrated }) => ({ auth, isLoading, rehydrated }),
+  ({ auth, ui }) => ({ auth, ui }),
   (dispatch) => ({ actions: bindActionCreators({
     authPass: actions.authPass,
     authFail: actions.authFail
@@ -23,15 +22,17 @@ import Loading from 'components/Loading';
 
 class Root extends Component {
   componentWillReceiveProps(nextProps) {
-    const { auth: { email, refreshToken }, rehydrated } = nextProps;
+    const { auth, ui: { rehydrated, ready } } = nextProps;
 
-    if (rehydrated === true && this.props.isLoading === true) {
-      this.authenticate({ email, refreshToken });
+    if (rehydrated && !ready) {
+      setTimeout(() => {
+        this.authenticate(auth);
+      }, 500);
     }
   }
 
-  async authenticate({ email, refreshToken }) {
-    if (!email || !refreshToken) {
+  async authenticate({ isLoggedIn, email, refreshToken }) {
+    if (!isLoggedIn || !email || !refreshToken) {
       this.props.actions.authFail();
       this.props.history.replace('/auth/login');
       return;
@@ -55,19 +56,17 @@ class Root extends Component {
   }
 
   render() {
-    const { rehydrated, isLoading } = this.props;
+    const { ui: { rehydrated, ready } } = this.props;
 
     return (
       <Layout>
-        {!rehydrated || isLoading ? (
+        {!rehydrated || !ready ? (
           <Loading />
         ) : (
           <Switch>
             <Route exact path="/" component={ Landing } />
 
-            <Route path="/auth/login" component={ Auth } />
-
-            <Route path="/auth/verification" component={ Auth } />
+            <Route path="/auth" component={ Auth } />
           </Switch>
         )}
       </Layout>

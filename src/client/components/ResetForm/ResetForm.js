@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 
-class Verification extends Component {
+class ResetForm extends Component {
   render() {
     return (
       <div>
-        Verification
+        ResetForm
       </div>
     )
   }
 }
 
-export default Verification;
+export default ResetForm;
