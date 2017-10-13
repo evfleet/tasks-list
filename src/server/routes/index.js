@@ -23,7 +23,7 @@ router.post('/authenticate', utils.requireParams('email', 'refreshToken'), async
     const decoded = await jwt.verify(cookieToken, `${constants.REFRESH_SECRET}${user.password}`);
 
     if (new Date().getTime() / 1000 > decoded.exp) {
-      console.log('expired');
+      throw new Error('Expired token');
     }
 
     return authService.createAuthResponse(res, user);
@@ -180,10 +180,6 @@ router.post('/reset-password', utils.requireParams('email', 'password', 'resetTo
   } catch (error) {
     return res.json(utils.createAPIResponse(false, 'Unexpected server error', 500));
   }
-});
-
-router.post('/update-password', async (req, res) => {
-
 });
 
 module.exports = router;

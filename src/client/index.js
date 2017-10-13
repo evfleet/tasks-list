@@ -20,7 +20,7 @@ const store = createStore(
 );
 
 const render = (Component) => {
-  ReactDOM.render(
+  ReactDOM.hydrate(
     <AppContainer>
       <Provider store={ store }>
         <BrowserRouter>
