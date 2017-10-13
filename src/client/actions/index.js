@@ -11,3 +11,23 @@ export const authPass = ({ email, refreshToken }) => ({
 export const authFail = () => ({
   type: actionTypes.AUTH_FAIL
 });
+
+export const registerPass = () => ({
+  type: actionTypes.REGISTER_PASS
+});
+
+export const registerFail = () => ({
+  type: actionTypes.REGISTER_FAIL
+});
+
+export const loginPass = () => ({
+  type: actionTypes.LOGIN_PASS
+});
+
+export const loginFail = () => ({
+  type: actionTypes.LOGIN_FAIL
+});
+
+export const logout = () => ({
+  type: actionTypes.LOGOUT
+});
